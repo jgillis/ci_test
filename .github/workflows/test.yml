@@ -9,17 +9,23 @@ jobs:
     runs-on: ${{ matrix.macos }}
     strategy:
       matrix:
-        macos: [macos-11, macos-12, macos-13, macos-14]
+        macos: [macos-13, macos-14, macos-15]
     steps:
+      - uses: casadi/action-setup-compiler@master
+        with:
+          cache-suffix: ''
+          target: ${{matrix.image == 'macos-13' && 'x86_64' || 'arm64'}}
       - name: Find and inspect libbz2 dylibs
         run: |
           echo "Searching for libbz2 dylibs on ${{ matrix.macos }}..."
           SEARCH_PATHS=(
             /usr/lib
-            /usr/local/lib
+            /usr/local
             /opt/homebrew/lib
-            /opt/local/lib
             /Library/Developer/CommandLineTools/SDKs
+            /usr/local/miniconda/
+            /Applications
+            /Users/runner
           )
           for path in "${SEARCH_PATHS[@]}"; do
             echo "--- Searching in $path"
