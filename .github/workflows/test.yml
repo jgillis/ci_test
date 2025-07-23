@@ -14,8 +14,18 @@ jobs:
       - name: Find and inspect libbz2 dylibs
         run: |
           echo "Searching for libbz2 dylibs on ${{ matrix.macos }}..."
-          sudo find / -name "*libbz2*.dylib" 2>/dev/null | while read dylib; do
-            echo "=== FOUND: $dylib"
-            otool -D "$dylib" 2>/dev/null || echo "(otool failed)"
-            echo ""
+          SEARCH_PATHS=(
+            /usr/lib
+            /usr/local/lib
+            /opt/homebrew/lib
+            /opt/local/lib
+            /Library/Developer/CommandLineTools/SDKs
+          )
+          for path in "${SEARCH_PATHS[@]}"; do
+            echo "--- Searching in $path"
+            find "$path" -name "*libbz2*.dylib" 2>/dev/null | while read dylib; do
+              echo "=== FOUND: $dylib"
+              otool -D "$dylib" 2>/dev/null || echo "(otool failed)"
+              echo ""
+            done
           done
