@@ -4,6 +4,7 @@ on:
   push:
   workflow_dispatch:
 
+
 jobs:
   search-libbz2-dylib:
     runs-on: ${{ matrix.macos }}
