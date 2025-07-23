@@ -23,7 +23,7 @@ jobs:
           )
           for path in "${SEARCH_PATHS[@]}"; do
             echo "--- Searching in $path"
-            find "$path" -name "*libbz2*.dylib" 2>/dev/null | while read dylib; do
+            for dylib in $(find "$path" -name "*libbz2*.dylib" 2>/dev/null); do
               echo "=== FOUND: $dylib"
               otool -D "$dylib" 2>/dev/null || echo "(otool failed)"
               echo ""
