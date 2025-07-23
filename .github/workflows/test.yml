@@ -17,6 +17,7 @@ jobs:
           target: ${{matrix.image == 'macos-13' && 'x86_64' || 'arm64'}}
       - name: Find and inspect libbz2 dylibs
         run: |
+          conda uninstall bzip2
           echo "Searching for libbz2 dylibs on ${{ matrix.macos }}..."
           SEARCH_PATHS=(
             /usr/lib
@@ -27,6 +28,7 @@ jobs:
             /Applications
             /Users/runner
           )
+          find /Users/runner/miniconda3/pkgs -path '*/bzip2-*/info/licenses/*'
           for path in "${SEARCH_PATHS[@]}"; do
             echo "--- Searching in $path"
             for dylib in $(find "$path" -name "*libbz2*.dylib" 2>/dev/null); do
