@@ -17,7 +17,6 @@ jobs:
           target: ${{matrix.image == 'macos-13' && 'x86_64' || 'arm64'}}
       - name: Find and inspect libbz2 dylibs
         run: |
-          conda uninstall bzip2
           echo "Searching for libbz2 dylibs on ${{ matrix.macos }}..."
           SEARCH_PATHS=(
             /usr/lib
