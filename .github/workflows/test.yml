@@ -1,0 +1,17 @@
+name: Find libbz2 on multiple macOS versions
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  search-libbz2:
+    runs-on: ${{ matrix.macos }}
+    strategy:
+      matrix:
+        macos: [macos-13, macos-14, macos-15]
+    steps:
+      - name: Search for libbz2
+        run: |
+          echo "Searching for libbz2 on ${{ matrix.macos }}"
+          sudo find / -name "*libbz2*" 2>/dev/null
