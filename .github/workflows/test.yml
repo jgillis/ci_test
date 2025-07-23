@@ -1,17 +1,21 @@
-name: Find libbz2 on multiple macOS versions
+name: Find libbz2 dylibs and print install_name
 
 on:
   push:
   workflow_dispatch:
 
 jobs:
-  search-libbz2:
+  search-libbz2-dylib:
     runs-on: ${{ matrix.macos }}
     strategy:
       matrix:
-        macos: [macos-13, macos-14, macos-15]
+        macos: [macos-11, macos-12, macos-13, macos-14]
     steps:
-      - name: Search for libbz2
+      - name: Find and inspect libbz2 dylibs
         run: |
-          echo "Searching for libbz2 on ${{ matrix.macos }}"
-          sudo find / -name "*libbz2*" 2>/dev/null
+          echo "Searching for libbz2 dylibs on ${{ matrix.macos }}..."
+          sudo find / -name "*libbz2*.dylib" 2>/dev/null | while read dylib; do
+            echo "=== FOUND: $dylib"
+            otool -D "$dylib" 2>/dev/null || echo "(otool failed)"
+            echo ""
+          done
